@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pengumuman Kelulusan MTs Al-Hikmah</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .firework {
+      background: url('https://i.ibb.co/DKYtkRv/fireworks.gif') center/cover no-repeat;
+    }
+    .rain {
+      background: url('https://i.ibb.co/hH4ZCr2/rain.gif') center/cover no-repeat;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 font-[Poppins]">
+  <header class="sticky top-0 bg-gradient-to-r from-blue-700 to-blue-900 text-white p-4 text-center shadow">
+    <img src="logo.png" alt="Logo Sekolah" class="mx-auto w-24 md:w-32" />
+    <h1 class="text-2xl md:text-4xl font-bold mt-2">PENGUMUMAN KELULUSAN</h1>
+    <p class="text-lg md:text-xl">MTs Al-Hikmah</p>
+    <p class="text-sm md:text-base">Tahun Ajaran 2024/2025</p>
+  </header>
+
+  <section id="countdownSection" class="flex flex-col justify-center items-center min-h-screen text-center px-4">
+    <div class="bg-white p-6 rounded shadow max-w-xl w-full">
+      <h2 class="text-2xl font-bold mb-4">Pengumuman akan dibuka dalam:</h2>
+      <div id="countdown" class="text-3xl font-mono text-blue-700"></div>
+    </div>
+  </section>
+
+  <section id="loginSection" class="hidden flex justify-center items-center min-h-screen">
+    <div class="bg-white p-6 rounded shadow w-full max-w-md">
+      <h2 class="text-xl font-bold text-center mb-4">Login Cek Kelulusan</h2>
+      <input id="inputData" type="text" placeholder="Masukkan Nama atau NISN" class="w-full mb-4 p-2 border rounded" />
+      <button onclick="cekKelulusan()" class="w-full bg-blue-700 text-white py-2 rounded hover:bg-blue-800">Login & Cek Hasil</button>
+      <div id="hasil" class="mt-6 hidden"></div>
+    </div>
+  </section>
+
+  <footer class="bg-gray-200 text-center text-sm py-4">
+    © 2025 MTs Al-Hikmah. Seluruh Hak Cipta Dilindungi.
+  </footer>
+
+  <script>
+    const siswa = [
+      { nisn: "3100249876", nama: "AFRIZAL NUR ALAM SYAH", status: "TIDAK LULUS" },
+      { nisn: "0108547747", nama: "RHAKA PRATAMA", status: "TIDAK LULUS" },
+      { nisn: "0104158568", nama: "ARVHIN ERICK SAPUTRA", status: "TIDAK LULUS" },
+      { nisn: "0106295965", nama: "SEYSA APRILIA", status: "TIDAK LULUS" },
+      { nisn: "0108491202", nama: "MUHAMAD IRFANDI", status: "TIDAK LULUS" },
+      { nisn: "0107646289", nama: "SITI MARSITA", status: "TIDAK LULUS" },
+      { nisn: "0097037714", nama: "ADELIA CAHYA", status: "LULUS" }
+    ];
+
+    function cekKelulusan() {
+      const input = document.getElementById("inputData").value.toLowerCase();
+      const hasilDiv = document.getElementById("hasil");
+      hasilDiv.className = "mt-6";
+
+      const siswaDitemukan = siswa.find(s => s.nisn === input || s.nama.toLowerCase() === input);
+
+      if (siswaDitemukan) {
+        const statusClass = siswaDitemukan.status === "LULUS" ? "text-green-600 firework" : "text-red-600 rain";
+        const pesan = siswaDitemukan.status === "LULUS"
+          ? "SELAMAT! Anda dinyatakan LULUS."
+          : "MOHON MAAF. SILAHKAN UNTUK DAPAT TERUS MELANJUTKAN BELAJAR";
+
+        hasilDiv.innerHTML = '<div class="p-6 text-center rounded shadow-md bg-white ' + statusClass + '">' +
+          '<h3 class="text-xl font-bold">' + siswaDitemukan.nama + '</h3>' +
+          '<p class="mb-2">NISN: ' + siswaDitemukan.nisn + '</p>' +
+          '<p class="text-lg font-semibold">' + pesan + '</p>' +
+          '</div>';
+        hasilDiv.classList.remove("hidden");
+      } else {
+        hasilDiv.innerHTML = '<div class="p-4 bg-yellow-100 text-yellow-700 rounded">Data tidak ditemukan. Periksa kembali Nama atau NISN Anda.</div>';
+        hasilDiv.classList.remove("hidden");
+      }
+    }
+
+    const countdownSection = document.getElementById("countdownSection");
+    const loginSection = document.getElementById("loginSection");
+    const countdownElement = document.getElementById("countdown");
+
+    const targetDate = new Date("2025-06-02T15:00:00+07:00").getTime();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      if (distance <= 0) {
+        countdownSection.style.display = "none";
+        loginSection.style.display = "flex";
+        clearInterval(interval);
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      countdownElement.innerHTML = `${days} hari, ${hours} jam, ${minutes} menit, ${seconds} detik`;
+    }
+
+    const interval = setInterval(updateCountdown, 1000);
+    updateCountdown();
+  </script>
+</body>
+</html>
